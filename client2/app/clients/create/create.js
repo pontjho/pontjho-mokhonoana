@@ -6,9 +6,9 @@
         $scope.model = {};
 
         $scope.save = function(model) {
-            clientService.save({}, clientService).then(function() {
-                
-            });
+            clientService.create({}, model).then(function() {
+                console.log('success');
+            }, (reason) => console.error('Error creating user', reason));
         };
     }]);
 })();
