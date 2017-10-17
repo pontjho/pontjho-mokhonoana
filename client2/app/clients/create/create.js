@@ -6,8 +6,10 @@
         $scope.model = {};
 
         $scope.save = function(model) {
-            clientService.create({}, model).then(function() {
-                console.log('success');
+            clientService.create({}, model)
+            .$promise
+            .then(function() {
+                location.path('/');
             }, (reason) => console.error('Error creating user', reason));
         };
     }]);
