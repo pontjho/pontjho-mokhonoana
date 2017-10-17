@@ -1,12 +1,11 @@
 (function() {
     "use strict";
 
-    angular.module('absa').controller('ListClientsController', ['$scope', function($scope) {
+    angular.module('absa').controller('ListClientsController', ['$scope', 'ClientService', function($scope, clientService) {
 
-        $scope.model = {};
-
-        $scope.save = function(model) {
-
-        };
+        clientService.query()
+        .$promise.then(function(clients) {
+          $scope.clients = clients;
+        });
     }]);
 })();

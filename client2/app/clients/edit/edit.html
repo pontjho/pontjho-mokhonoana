@@ -2,19 +2,19 @@
     <div>
         <label>
             <span>Surname</span>
-            <input type="text" />
+            <input type="text" ng-model="model.surname" />
         </label>
     </div>
     <div>
         <label>
             <span>First names</span>
-            <input type="text" />
+            <input type="text" ng-model="model.firstNames" />
         </label>
     </div>
     <div>
         <label>
             <span>Identity type</span>
-            <select>
+            <select ng-model="model.identityType">
                 <option>Please select</option>
                 <option>Passport</option>
                 <option>Identity Document</option>
@@ -24,13 +24,17 @@
     <div>
         <label>
             <span>Identity number</span>
-            <input type="text" />
+            <input type="text" ng-model="model.identityNumber" />
         </label>
     </div>
     <div>
         <label>
             <span>Date of birth</span>
-            <input type="date" />
+            <input type="date" ng-model="model.dateOfBirth" />
         </label>
+    </div>
+
+    <div>
+        <button ng-click="save(model)">Save</button>
     </div>
 </div>
