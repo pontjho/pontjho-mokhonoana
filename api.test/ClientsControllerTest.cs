@@ -18,6 +18,12 @@ namespace api.test
                 IdentityNumber = "   ",
                 DateOfBirth = new DateTime()
             };
+            var repository = new Mock<ClientRepository>();
+            var controller = new ClientsController(repository.Object);
+
+            controller.Post(model);
+
+            repository.Verify(r => r.CreateClient(It.IsAny<ClientModel>()));
         }
 
         [TestMethod]

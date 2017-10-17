@@ -9,6 +9,13 @@ namespace Absa.Assessment.Api.Client
     [Route("api/[controller]")]
     public class ClientsController : Controller
     {
+        private readonly ClientRepository clientRepository;
+
+        public ClientsController(ClientRepository clientRepository)
+        {
+            this.clientRepository = clientRepository;
+        }
+
         [HttpGet]
         public IEnumerable<ClientModel> Get()
         {
@@ -27,6 +34,7 @@ namespace Absa.Assessment.Api.Client
         [HttpPost]
         public void Post([FromBody]ClientModel value)
         {
+            clientRepository.CreateClient(value);
         }
 
         [HttpPut("{id}")]
