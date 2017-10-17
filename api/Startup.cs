@@ -37,8 +37,11 @@ namespace Absa.Assessment.Api
             var database = client.GetDatabase("client-manager");
             
             services.AddSingleton<IMongoCollection<ClientModel>>(database.GetCollection<ClientModel>("clients"));
+            services.AddSingleton<ClientRepository, MongoClientRepository>();
             // Add framework services.
-            services.AddMvc();
+            services
+                .AddCors()
+                .AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
