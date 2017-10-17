@@ -1,0 +1,26 @@
+<div>
+    <h3>Clients</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Surname</th>
+                <th>First names</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="client in clients">
+                <td>{{client.surname}}</td>
+                <td>{{client.firstNames}}</td>
+                <td>
+                    <a href="#">View</a>
+                    <a href="#">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <a>New</a>
+    </div>
+</div>
