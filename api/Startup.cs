@@ -50,6 +50,13 @@ namespace Absa.Assessment.Api
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseCors(builder =>
+            builder
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+            );
+
             app.UseMvc();
         }
     }
