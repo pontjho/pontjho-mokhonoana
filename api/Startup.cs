@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Absa.Assessment.Api.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
-namespace api
+namespace Absa.Assessment.Api
 {
     public class Startup
     {
@@ -27,6 +29,14 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var connectionString = Configuration.GetSection("repository")["connectionString"];
+            Console.WriteLine("Connection string " + connectionString);
+
+            var client = new MongoDB.Driver.MongoClient(connectionString);
+            var database = client.GetDatabase("client-manager");
+            
+            services.AddSingleton<IMongoCollection<ClientModel>>(database.GetCollection<ClientModel>("clients"));
             // Add framework services.
             services.AddMvc();
         }
