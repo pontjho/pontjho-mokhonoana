@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Absa.Assessment.Api.Client;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using System.Linq;
 using System;
 using Moq;
@@ -12,7 +13,7 @@ namespace api.test
     public class ClientsControllerTest
     {
         [TestMethod]
-        public void GivenAClientModel_WhenPosting_TheModelIsPersisted()
+        public async Task GivenAClientModel_WhenPosting_TheModelIsPersisted()
         {
             var model = new ClientModel {
                 Surname = "Bloggs",
@@ -24,27 +25,27 @@ namespace api.test
             var repository = new Mock<ClientRepository>();
             var controller = new ClientsController(repository.Object);
 
-            controller.Post(model);
+            await controller.Post(model);
 
             repository.Verify(r => r.CreateClient(It.IsAny<ClientModel>()));
         }
 
         [TestMethod]
-        public void GivenAnInvalidClientModel_WhenPosting_BadRequestIsReturned()
+        public async Task GivenAnInvalidClientModel_WhenPosting_BadRequestIsReturned()
         {
             ClientModel model = new ClientModel {};
             var repository = new Mock<ClientRepository>();
             var controller = new ClientsController(repository.Object);
             controller.ModelState.AddModelError("Surname", "Required");
 
-            var result = controller.Post(model);
+            var result = await controller.Post(model);
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
 
             repository.Verify(r => r.CreateClient(It.IsAny<ClientModel>()), Times.Never);
         }
 
         [TestMethod]
-        public void GivenAPersistedClientModel_WhenGettingById_TheClientModelIsReturned()
+        public async Task GivenAPersistedClientModel_WhenGettingById_TheClientModelIsReturned()
         {
             var model = new ClientModel {
                 Id = Guid.NewGuid(),
@@ -57,9 +58,9 @@ namespace api.test
             var repository = new Mock<ClientRepository>();
             var controller = new ClientsController(repository.Object);
 
-            repository.Setup(r => r.GetClient(model.Id)).Returns(model);
+            repository.Setup(r => r.GetClient(model.Id)).Returns(Task.FromResult(model));
 
-            var result = controller.Get(model.Id);
+            var result = await controller.Get(model.Id);
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var typedResult = (OkObjectResult)result;
@@ -67,20 +68,20 @@ namespace api.test
         }
 
         [TestMethod]
-        public void GivenAClientModel_WhenGettingByInvalidId_NotFoundIsReturned()
+        public async Task GivenAClientModel_WhenGettingByInvalidId_NotFoundIsReturned()
         {
             var repository = new Mock<ClientRepository>();
             var controller = new ClientsController(repository.Object);
 
-            repository.Setup(r => r.GetClient(It.IsAny<Guid>())).Returns((ClientModel)null);
+            repository.Setup(r => r.GetClient(It.IsAny<Guid>())).Returns(Task.FromResult((ClientModel)null));
 
-            var result = controller.Get(Guid.NewGuid());
+            var result = await controller.Get(Guid.NewGuid());
 
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
         }
 
         [TestMethod]
-        public void GivenAPersistedClientModel_WhenUpdatingWithNewAttributes_ThePersistedModelIsUpdated()
+        public async Task GivenAPersistedClientModel_WhenUpdatingWithNewAttributes_ThePersistedModelIsUpdated()
         {
             var originalModel = new ClientModel {
                 Id = Guid.NewGuid(),
@@ -93,7 +94,7 @@ namespace api.test
             var repository = new Mock<ClientRepository>();
             var controller = new ClientsController(repository.Object);
 
-            var result = controller.Put(originalModel.Id, new ClientModel {
+            var result = await controller.Put(originalModel.Id, new ClientModel {
                 Id = Guid.NewGuid(),
                 Surname = "Bloggs1",
                 FirstNames = "Joe Peters",
@@ -107,7 +108,7 @@ namespace api.test
         }
 
         [TestMethod]
-        public void GivenAListOfClientModels_WhenQuerying_TheClientModelsAreReturned()
+        public async Task GivenAListOfClientModels_WhenQuerying_TheClientModelsAreReturned()
         {
             var model1 = new ClientModel {
                 Id = Guid.NewGuid(),
@@ -129,13 +130,15 @@ namespace api.test
             var repository = new Mock<ClientRepository>();
             var controller = new ClientsController(repository.Object);
 
-            repository.Setup(r => r.QueryClients()).Returns(new ClientModel[] { model1, model2 } );
+            repository.Setup(r => r.QueryClients()).Returns(Task.FromResult((IEnumerable<ClientModel>)new ClientModel[] { model1, model2 } ));
 
-            var result = controller.Get();
+            var result = await controller.Get();
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var typedResult = (OkObjectResult)result;
-            Assert.AreEqual(2, (typedResult.Value as IEnumerable<ClientModel>).Count());
+            var modelList = typedResult.Value as IEnumerable<ClientModel>;
+            Assert.AreEqual(2, modelList.Count());
+            Assert.AreEqual(model1.Id, modelList.ToArray()[0].Id);
         }
     }
 }

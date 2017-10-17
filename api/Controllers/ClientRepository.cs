@@ -1,15 +1,15 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Absa.Assessment.Api.Client
 {
     public interface ClientRepository
     {
-        ClientModel GetClient(Guid id);
-        void CreateClient(ClientModel model);
-        void UpdateClient(Guid id, ClientModel model);
-        IEnumerable<ClientModel> QueryClients();
-        void RemoveClient(Guid id);
+        Task<ClientModel> GetClient(Guid id);
+        Task CreateClient(ClientModel model);
+        Task UpdateClient(Guid id, ClientModel model);
+        Task<IEnumerable<ClientModel>> QueryClients();
     }
 }

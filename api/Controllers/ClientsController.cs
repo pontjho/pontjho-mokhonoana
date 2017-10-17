@@ -17,18 +17,15 @@ namespace Absa.Assessment.Api.Client
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(new ClientModel[] {
-                new ClientModel {},
-                new ClientModel {}
-            });
+            return Ok(await clientRepository.QueryClients());
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var theReturn = clientRepository.GetClient(id);
+            var theReturn = await clientRepository.GetClient(id);
             if(theReturn == null)
             {
                 return NotFound();
@@ -40,20 +37,20 @@ namespace Absa.Assessment.Api.Client
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]ClientModel value)
+        public async Task<IActionResult> Post([FromBody]ClientModel value)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(value);
             }
-            clientRepository.CreateClient(value);
+            await clientRepository.CreateClient(value);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody]ClientModel value)
+        public async Task<IActionResult> Put(Guid id, [FromBody]ClientModel value)
         {
-            clientRepository.UpdateClient(id, value);
+            await clientRepository.UpdateClient(id, value);
             return Ok();
         }
     }
