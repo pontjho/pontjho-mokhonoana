@@ -26,25 +26,32 @@ namespace Absa.Assessment.Api.Client
         }
 
         [HttpGet("{id}")]
-        public ClientModel Get(int id)
+        public IActionResult Get(Guid id)
         {
-            return new ClientModel {};
+            return Ok(clientRepository.GetClient(id));
         }
 
         [HttpPost]
-        public void Post([FromBody]ClientModel value)
+        public IActionResult Post([FromBody]ClientModel value)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(value);
+            }
             clientRepository.CreateClient(value);
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]ClientModel value)
+        public IActionResult Put(int id, [FromBody]ClientModel value)
         {
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            return Ok();
         }
     }
 }
