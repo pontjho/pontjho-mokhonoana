@@ -28,7 +28,15 @@ namespace Absa.Assessment.Api.Client
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
-            return Ok(clientRepository.GetClient(id));
+            var theReturn = clientRepository.GetClient(id);
+            if(theReturn == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok();
+            }
         }
 
         [HttpPost]

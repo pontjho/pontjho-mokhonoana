@@ -67,7 +67,14 @@ namespace api.test
         [TestMethod]
         public void GivenAClientModel_WhenGettingByInvalidId_NotFoundIsReturned()
         {
+            var repository = new Mock<ClientRepository>();
+            var controller = new ClientsController(repository.Object);
 
+            repository.Setup(r => r.GetClient(It.IsAny<Guid>())).Returns((ClientModel)null);
+
+            var result = controller.Get(Guid.NewGuid());
+
+            Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
         }
 
         [TestMethod]
