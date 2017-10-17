@@ -17,12 +17,12 @@ namespace Absa.Assessment.Api.Client
         }
 
         [HttpGet]
-        public IEnumerable<ClientModel> Get()
+        public IActionResult Get()
         {
-            return new ClientModel[] {
+            return Ok(new ClientModel[] {
                 new ClientModel {},
                 new ClientModel {}
-            };
+            });
         }
 
         [HttpGet("{id}")]
@@ -35,7 +35,7 @@ namespace Absa.Assessment.Api.Client
             }
             else
             {
-                return Ok();
+                return Ok(theReturn);
             }
         }
 
@@ -51,14 +51,9 @@ namespace Absa.Assessment.Api.Client
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]ClientModel value)
+        public IActionResult Put(Guid id, [FromBody]ClientModel value)
         {
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
+            clientRepository.UpdateClient(id, value);
             return Ok();
         }
     }
