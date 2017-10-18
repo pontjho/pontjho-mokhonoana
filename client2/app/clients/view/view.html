@@ -4,25 +4,29 @@
     <div>
         <div>
             <div>Surname</div>
-            <div>{{client.surname}}</div>
+            <div>{{model.surname}}</div>
         </div>
         <div>
-            <div>Surname</div>
-            <div>{{client.firstName}}</div>
+            <div>First names</div>
+            <div>{{model.firstNames}}</div>
         </div>
         <div>
-            <div>Surname</div>
-            <div>{{client.identityType}}</div>
+            <div>Identity type</div>
+            <div ng-switch="model.identityType">
+                <div ng-switch-when="1">Passport</div>
+                <div ng-switch-when="2">Identity number</div>
+                <div ng-switch-default>Unspecified</div>
+            </div>{{model.identityType}}
         </div>
         <div>
-            <div>Surname</div>
-            <div>{{client.identityNumber}}</div>
+            <div>Number</div>
+            <div>{{model.identityNumber}}</div>
         </div>
         <div>
             <div>Date of birth</div>
-            <div>{{client.dateOfBirth}}</div>
+            <div>{{model.dateOfBirth}}</div>
         </div>
     </div>
 
-    <a href="#">Back to list</a>
+    <a href="#!/">Back to list</a>
 </div>

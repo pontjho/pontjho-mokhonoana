@@ -1,12 +1,11 @@
 (function() {
     "use strict";
 
-    angular.module('absa').controller('ViewClientController', ['$scope', function($scope) {
+    angular.module('absa').controller('ViewClientController', ['$scope', 'ClientService', '$location', '$routeParams', 
+    function($scope, clientService, location, routeParams) {
 
-        $scope.model = {};
-
-        $scope.save = function(model) {
-
-        };
+        clientService.get({clientId: routeParams.clientId})
+            .$promise
+            .then((model) => {$scope.model = model;}, (err) => console.error('Error fetching client', err));
     }]);
 })();
