@@ -14,11 +14,7 @@
     <div>
         <label>
             <span>Identity type</span>
-            <select ng-model="model.identityType">
-                <option>Please select</option>
-                <option>Passport</option>
-                <option>Identity Document</option>
-            </select>
+            <select ng-model="model.identityType" ng-options="selectedItem.id as selectedItem.name for selectedItem in values"></select>
         </label>
     </div>
     <div>
